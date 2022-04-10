@@ -1,0 +1,7 @@
+# build
+**/target/
+**/target/*
+**/node/
+**/node/*
+**/node_modules/
+**/node_modules/*
