@@ -1,11 +1,12 @@
 import {
   Home as HomeIcon,
-  MonetizationOn as MarketplaceIcon,
+  MonetizationOn as MarketplaceIcon
 } from '@mui/icons-material';
-
+import { MarketplaceListings } from '../components/MarketplaceListings';
 import { Home } from '../pages/Home';
-
 import { Route } from '../types/Route';
+
+
 
 const routes: Array<Route> = [
   {
@@ -22,6 +23,7 @@ const routes: Array<Route> = [
     key: 'router-dashboard',
     title: 'Marketplace',
     description: 'Marketplace',
+    component: MarketplaceListings,
     path: '/marketplace',
     isEnabled: true,
     icon: MarketplaceIcon,
