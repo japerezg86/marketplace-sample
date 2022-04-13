@@ -14,7 +14,9 @@ import TableSortLabel, { tableSortLabelClasses } from '@mui/material/TableSortLa
 import Typography from '@mui/material/Typography';
 import { visuallyHidden } from '@mui/utils';
 import * as React from 'react';
+import { useEffect } from 'react';
 import { useLocation } from 'react-router';
+import { getAllGameItems } from '../../services/gameItems.service';
 import { GameItem } from '../../types/GameItem';
 import { PageTitle } from '../PageTitle';
 
@@ -41,12 +43,6 @@ function createGameItem(
     expiry
   };
 }
-
-const rows = [
-  createGameItem(11111, 'Item 1', 'Item 1 Description', 12345, 10.99, '2022-04-20'),
-  createGameItem(22222, 'Item 2', 'Item 2 Description', 23456, 9.99, '2022-04-25'),
-  createGameItem(33333, 'Item 3', 'Item 3 Description', 34567, 19.25, '2022-04-30')
-];
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   if (b[orderBy] < a[orderBy]) {
@@ -167,6 +163,27 @@ function EnhancedTableHead(props: EnhancedTableProps) {
 export const MarketplaceListings = () => {
   const location = useLocation();
 
+  const [gameItemList, setGameItems] = React.useState<Array<any>>([]);
+  useEffect(() => {
+    const getItems = async () => {
+      getAllGameItems().then(response => {
+        setGameItems(response);
+      });
+    };
+  getItems();
+  }, []);
+
+  let rows = [];
+  for (let i = 0; i < gameItemList.length; i++) {
+    rows.push(createGameItem(gameItemList[i].id,
+      gameItemList[i].name,
+      gameItemList[i].description,
+      gameItemList[i].ownerId,
+      gameItemList[i].price,
+      gameItemList[i].expiry
+    ));
+  };
+
   const [order, setOrder] = React.useState<Order>('asc');
   const [orderBy, setOrderBy] = React.useState<keyof GameItem>('name');
   const [page, setPage] = React.useState(0);
@@ -248,7 +265,7 @@ export const MarketplaceListings = () => {
                         </TableCell>
                         <TableCell>{row.description}</TableCell>
                         <TableCell align="right">{row.expiry}</TableCell>
-                        <TableCell align="right">{row.price}</TableCell>
+                        <TableCell align="right">${row.price}</TableCell>
                       </TableRow>
                     );
                   })}
